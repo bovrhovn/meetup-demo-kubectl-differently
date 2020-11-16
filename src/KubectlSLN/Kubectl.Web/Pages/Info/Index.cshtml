@@ -4,19 +4,17 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Kubek</h1>
-    <p>
-        Kubek is an implementation of API's to connect to Kubernetes cluster with managed code. In order to run the app, you will
-        need an active Kubernetes cluster to work with.
-        <br />
-        Features:
-    </p>
-    <ul>
-        <li>login to cluster and view resources</li>
-        <li>
-            <a asp-page="/Kubek/Dashboard">simple dashboard</a> and use real-time to showcase results
-        </li>
-        <li>extensibility functionalities</li>
-    </ul>
-</div>
+<h1 class="display-4">Welcome to Kubek</h1>
+<p>
+    Kubek is an implementation of API's to connect to Kubernetes cluster with managed code (it uses <a href="https://github.com/kubernetes-client/csharp">Kubernetes Client written in C#</a>).
+    In order to run the app, you will need an active Kubernetes cluster to work with.
+    <br/>
+    Features:
+</p>
+<ul>
+    <li>login to cluster and view resources</li>
+    <li>
+        <a asp-page="/Kubek/Dashboard">simple dashboard</a> and use real-time to showcase results
+    </li>
+    <li>extensibility functionalities</li>
+</ul>

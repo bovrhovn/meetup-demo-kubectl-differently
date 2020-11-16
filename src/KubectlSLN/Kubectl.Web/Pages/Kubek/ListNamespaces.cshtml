@@ -1,0 +1,50 @@
+@page
+@model ListNamespacesPageModel
+
+@{
+    ViewData["Title"] = "List namespaces on cluster";
+}
+
+<h1>
+    List namespaces
+</h1>
+<p>
+    Below you can see all of the namespaces on the cluster (you can query the namespace to get back pods)
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Creation date</th>
+        <th scope="col">Labels</th>
+        <th scope="col">...</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var currentModel in Model.NamespaceViewModels)
+    {
+        <tr>
+            <td>@currentModel.Id</td>
+            <td>@currentModel.Name</td>
+            <td>@currentModel.CreationDate.ToShortDateString()</td>
+            <td>@currentModel.Labels</td>
+            <td>
+                <span id='load@currentModel.Id'>Load pods</span>
+                <script type="text/javascript">
+                    document.getElementById('load@currentModel.Id').addEventListener('click', () => {
+                            fetch('/Kubek/ListNamespaces?handler=GetPods&Name=@currentModel.Name') 
+                                .then(result=>{
+                                    return result.text();
+                                })                                           
+                                .then(text => {
+                                    console.log(text);
+                                    document.getElementById('load@currentModel.Id').innerHTML = text;
+                                })});
+                </script>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
