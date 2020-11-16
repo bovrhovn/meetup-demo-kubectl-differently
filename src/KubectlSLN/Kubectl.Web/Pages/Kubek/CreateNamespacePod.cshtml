@@ -1,0 +1,55 @@
+@page
+@model CreateNamespacePodPageModel
+
+@{
+    ViewData["Title"] = "Create namespace and pod";
+}
+
+<h1>
+    Create namespace and pod
+</h1>
+
+@if (!string.IsNullOrEmpty(Model.InfoText))
+{
+    <p class="text-danger font-weight-bolder mt-4 mb-4">@Model.InfoText</p>
+}
+<p>
+    Use below form to create a pod from selected image in newly created namespace. It will automatically redirect you after creation
+    to <a asp-page="/Kubek/ListNamespaces">List namespaces</a> option.
+</p>
+
+<form method="post">
+    <div class="form-group">
+        <label for="namespaceName">Namespace name</label>
+        <input asp-for="NamespaceName"
+               class="form-control"
+               id="namespaceName"
+               type="text">
+        <small class="form-text text-muted"
+               id="namespaceNameInfo">
+            Use all lowercase
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="podName">Pod name</label>
+        <input asp-for="PodName"
+               class="form-control"
+               id="podName"
+               type="text">
+    </div>
+    <div class="form-group">
+        <label for="sizeCombo">Select image to deploy to pod</label>
+        <select class="form-control"
+                id="sizeCombo"
+                name="image">
+            @foreach (var listItem in Model.Images)
+            {
+                <option value="@listItem.Id">@listItem.Name</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-primary"
+            type="submit">
+        Create namespace and pod with selected image
+    </button>
+</form>

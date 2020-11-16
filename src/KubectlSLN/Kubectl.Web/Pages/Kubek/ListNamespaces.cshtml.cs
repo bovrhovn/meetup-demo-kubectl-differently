@@ -13,7 +13,7 @@ namespace Kubectl.Web.Pages.Kubek
     public class ListNamespacesPageModel : PageModel
     {
         private readonly IKubernetesObjects kubernetesObjects;
-        
+
         public ListNamespacesPageModel(IKubernetesObjects kubernetesObjects)
         {
             this.kubernetesObjects = kubernetesObjects;
@@ -39,7 +39,7 @@ namespace Kubectl.Web.Pages.Kubek
                 });
             }
         }
-        
+
         public async Task<IActionResult> OnGetPods()
         {
             var pods = await kubernetesObjects.ListPodsAsync(Name);
@@ -51,11 +51,12 @@ namespace Kubectl.Web.Pages.Kubek
             }
 
             currentPods += "</ul>";
-            
+
             return Content(currentPods);
         }
 
-        [BindProperty(SupportsGet =true)] public string Name { get; set; }
+        [BindProperty(SupportsGet = true)] public string Name { get; set; }
+
         [BindProperty]
         public List<NamespaceViewModel> NamespaceViewModels { get; set; } = new List<NamespaceViewModel>();
     }

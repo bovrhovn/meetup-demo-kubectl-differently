@@ -2,11 +2,12 @@
 @model DashboardPageModel
 
 @{
+    var clusterName = Model.Name;
     ViewData["Title"] = "Kubek dashboard";
 }
 
 <h1>
-    Kubek dashboard for @Model.Name
+    Kubek dashboard for @clusterName
 </h1>
 
 <div class="row">
@@ -14,11 +15,23 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">List namespaces</h5>
-                <h6 class="card-subtitle mb-2 text-muted">list namespaces inside cluster </h6>
+                <h6 class="card-subtitle mb-2 text-muted">list namespaces inside cluster @clusterName</h6>
                 <p class="card-text">
                     List namespaces based on the user permission on the K8S cluster with their associated pods.
                 </p>
-                <a class="card-link">Go to </a>
+                <a class="card-link" asp-page="/Kubek/ListNamespaces">Go <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create namespaces and pod</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Create namespace in cluster @clusterName</h6>
+                <p class="card-text">
+                    Create a namespace and pod inside of cluster @clusterName with getting data from private container registry
+                </p>
+                <a class="card-link">Go <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>

@@ -39,6 +39,7 @@ namespace Kubectl.Web
             
             services.AddScoped<IKubernetesService, AksService>();
             services.AddScoped<IKubernetesObjects, AKSObjectsService>();
+            services.AddScoped<IContainerRegistryService, ACRService>();
             
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();

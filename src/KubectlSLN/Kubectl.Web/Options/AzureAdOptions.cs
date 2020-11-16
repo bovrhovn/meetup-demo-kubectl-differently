@@ -10,5 +10,7 @@ namespace Kubectl.Web.Options
         public string SignedOutCallbackPath { get; set; }
         public string ClientSecret { get; set; }
         public string SubscriptionId { get; set; }
+        public string AcrRG { get; set; }
+        public string DockerHostUrl { get; set; }
     }
 }
