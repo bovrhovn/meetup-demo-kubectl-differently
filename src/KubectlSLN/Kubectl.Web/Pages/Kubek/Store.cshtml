@@ -1,0 +1,48 @@
+@page
+@model StorePageModel
+
+@{
+    ViewData["Title"] = "Store scenario";
+}
+
+<h1>
+    Store scenario
+</h1>
+<p class="text-info">Below is an example of scenario, how you could use API's in action.</p>
+
+@if (!string.IsNullOrEmpty(Model.InfoText))
+{
+    <p class="text-danger font-weight-bolder mt-4 mb-4">@Model.InfoText</p>
+}
+<h3>
+    Create a new store
+</h3>
+<p>
+    Use below details to create a new trial store to test out functionality and then, if you like it, you can
+    buy the subscription.
+</p>
+
+@if (!string.IsNullOrEmpty(Model.StoreIp))
+{
+    <p class="text-success font-weight-bolder mt-4 mb-4">Navigate to <a href="@Model.StoreIp">@Model.NamespaceName</a></p>
+}
+
+<form method="post">
+    <div class="form-group">
+        <label for="namespaceName">Store name</label>
+        <input asp-for="NamespaceName"
+               class="form-control"
+               id="namespaceName"
+               type="text">
+    </div>
+    <button asp-page-handler="CreateScenario"
+            class="btn btn-primary mr-3"
+            type="submit">
+        Create scenario <i class="fas fa-store-alt"></i>
+    </button>
+    <button asp-page-handler="DeleteScenario"
+            input
+            type="submit">
+        Delete scenario <i class="fas fa-minus-circle"></i>
+    </button>
+</form>

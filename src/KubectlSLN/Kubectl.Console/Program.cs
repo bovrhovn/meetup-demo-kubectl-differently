@@ -10,6 +10,10 @@ using Spectre.Console;
 
 namespace Kubectl.Console
 {
+    /// <summary>
+    /// having demos from https://github.com/kubernetes-client/csharp in one place together with
+    /// practical examples of how to do it
+    /// </summary>
     class Program
     {
         static async Task Main(string[] args)
@@ -23,6 +27,8 @@ namespace Kubectl.Console
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
             IKubernetes client = new Kubernetes(config);
 
+            System.Console.WriteLine($"Listening to master at {config.Host}");
+            
             var namespaces = await client.ListNamespaceAsync();
 
             foreach (var ns in namespaces.Items)
@@ -85,7 +91,7 @@ namespace Kubectl.Console
             
             var webSocket =
                 await client.WebSocketNamespacedPodExecAsync(pod.Metadata.Name, 
-                    namespaceNameForTest, "ls", pod.Spec.Containers[0].Name);
+                    namespaceNameForTest, "env", pod.Spec.Containers[0].Name);
 
             var demux = new StreamDemuxer(webSocket);
             demux.Start();
@@ -103,9 +109,9 @@ namespace Kubectl.Console
             var status = await client.DeleteNamespaceAsync(namespaceNameForTest, new V1DeleteOptions());
             System.Console.WriteLine($"Namespace {namespaceNameForTest} has been deleted - status {status.Message} - {status.Status}");
             
-            HorizontalRule("Create from yaml file (private registry) - deployment");
-
             System.Console.Read(); //break for continue
+            
+            HorizontalRule("Load objects from yaml file");
             
             var typeMap = new Dictionary<string, Type>
             {
