@@ -145,7 +145,7 @@ namespace Kubectl.Web.Services
                 logger.LogInformation($"Creating service in a namespace {namespaceName}");
 
                 //3. create service
-                var createdService = await kubernetes.CreateNamespacedServiceAsync(new V1Service
+                await kubernetes.CreateNamespacedServiceAsync(new V1Service
                 {
                     Metadata = new V1ObjectMeta
                     {
@@ -157,14 +157,28 @@ namespace Kubectl.Web.Services
                         {
                             {"name", $"{name}-label"}
                         },
-                        Type = Constants.ServiceTypeLoadBalancer
+                        Type = Constants.ServiceTypeLoadBalancer, Ports = new List<V1ServicePort>
+                        {
+                            new V1ServicePort
+                            {
+                                Port = 80,
+                                Name = "default-port"
+                            }
+                        }
                     }
                 }, namespaceName);
 
                 logger.LogInformation("Getting IP from newly created service");
 
+                var service = kubernetes.ListNamespacedService(namespaceName);
+                while (service.Items[0].Status.LoadBalancer.Ingress == null)
+                {
+                    await Task.Delay(2000); // poor mans watch - wait for 2s and check again
+                    service = kubernetes.ListNamespacedService(namespaceName);
+                }
+
                 //4. get IP (of course here you can map it to external )
-                return createdService.Spec.LoadBalancerIP;
+                return service.Items[0].Status.LoadBalancer.Ingress[0].Ip;
             }
             catch (Exception e)
             {
@@ -176,9 +190,9 @@ namespace Kubectl.Web.Services
 
         public async Task<bool> DeleteScenarioAsync(string name)
         {
-            logger.LogInformation("Getting cluster information - client - CreateNamespaceAsync");
+            logger.LogInformation("Getting cluster information - client - DeleteScenarioAsync");
             var kubernetes = await client.LoadBasedOnConfigurationAsync();
-            logger.LogInformation("Creating namespace");
+            logger.LogInformation("Deleting namespace (and with that everything)");
 
             var status = await kubernetes.DeleteNamespaceAsync($"{name}-test", new V1DeleteOptions());
             return status.Status == Constants.SUCCESS;

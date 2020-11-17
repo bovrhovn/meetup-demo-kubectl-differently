@@ -33,6 +33,7 @@ namespace Kubectl.Web.Pages.Kubek
             }
             logger.LogInformation("Creating scenario");
             StoreIp = await kubernetesCrud.CreateScenarioAsync(NamespaceName);
+            StoreIp = $"http://{StoreIp}";
             logger.LogInformation($"Finished scenario, IP is {StoreIp}");
             return RedirectToPage("/Kubek/Store");
         }
@@ -52,7 +53,7 @@ namespace Kubectl.Web.Pages.Kubek
         }
 
         [BindProperty] public string NamespaceName { get; set; }
-        [BindProperty] public string StoreIp { get; set; }
+        [TempData] public string StoreIp { get; set; }
         [TempData] public string InfoText { get; set; }
     }
 }
