@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: store-test
+spec:
+  containers:
+    - name: store
+      image: ceecsa.azurecr.io/store/web:latest
+      ports:
+        - containerPort: 80

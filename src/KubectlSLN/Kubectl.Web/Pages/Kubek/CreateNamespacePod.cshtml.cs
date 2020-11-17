@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kubectl.Web.Helpers;
@@ -18,7 +17,7 @@ namespace Kubectl.Web.Pages.Kubek
         private readonly IKubernetesCrud kubernetesCrud;
         private readonly ILogger<CreateNamespacePodPageModel> logger;
 
-        public CreateNamespacePodPageModel(IContainerRegistryService containerRegistryService, 
+        public CreateNamespacePodPageModel(IContainerRegistryService containerRegistryService,
             IKubernetesCrud kubernetesCrud,
             ILogger<CreateNamespacePodPageModel> logger)
         {
@@ -32,7 +31,7 @@ namespace Kubectl.Web.Pages.Kubek
             var list = await containerRegistryService.GetImagesForRepositoryAsync("ceecsa");
             Images = list;
         }
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (string.IsNullOrEmpty(NamespaceName))
@@ -46,15 +45,14 @@ namespace Kubectl.Web.Pages.Kubek
                 InfoText = "There has been an error with creating namespace in k8s, try again";
                 return RedirectToPage("/Kubek/CreateNamespacePod");
             }
-            
+
             var form = await Request.ReadFormAsync();
             var imageName = form["image"];
             logger.LogInformation($"Received {imageName}");
             if (!string.IsNullOrEmpty(imageName))
             {
-                if (string.IsNullOrEmpty(PodName))
-                    PodName = Utils.GenerateName(5);
-                
+                if (string.IsNullOrEmpty(PodName)) PodName = Utils.GenerateName(5);
+
                 if (!await kubernetesCrud.CreatePodAsync(NamespaceName, PodName, imageName))
                 {
                     InfoText = "There has been an error in creating pod, try again";
@@ -67,11 +65,9 @@ namespace Kubectl.Web.Pages.Kubek
         }
 
 
-        [BindProperty]
-        public string NamespaceName { get; set; }[BindProperty]
-        public string PodName { get; set; }
+        [BindProperty] public string NamespaceName { get; set; }
+        [BindProperty] public string PodName { get; set; }
         [TempData] public string InfoText { get; set; }
-        [BindProperty]
-        public List<DockerImageViewModel> Images { get; set; }
+        [BindProperty] public List<DockerImageViewModel> Images { get; set; }
     }
 }

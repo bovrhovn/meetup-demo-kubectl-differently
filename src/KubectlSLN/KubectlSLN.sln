@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kubectl.Web", "Kubectl.Web\Kubectl.Web.csproj", "{87287320-76CE-4139-8D21-11633FB67009}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{31D159AF-8052-482D-AB20-292B8CD2DA25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kubectl.Console", "Kubectl.Console\Kubectl.Console.csproj", "{177CF041-550A-4D3D-A8B2-BB70170A17F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,5 +14,9 @@ Global
 		{87287320-76CE-4139-8D21-11633FB67009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87287320-76CE-4139-8D21-11633FB67009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87287320-76CE-4139-8D21-11633FB67009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{177CF041-550A-4D3D-A8B2-BB70170A17F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{177CF041-550A-4D3D-A8B2-BB70170A17F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{177CF041-550A-4D3D-A8B2-BB70170A17F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{177CF041-550A-4D3D-A8B2-BB70170A17F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

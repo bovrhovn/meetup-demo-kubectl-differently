@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
@@ -42,9 +43,39 @@ namespace Kubectl.Web.Services
             return false;
         }
 
-        public Task<bool> CreatePodAsync(string namespaceName, string podname, string image)
+        public async Task<bool> CreatePodAsync(string namespaceName, string podname, string image)
         {
-            throw new NotImplementedException();
+            logger.LogInformation("Getting cluster information - client - CreateNamespaceAsync");
+            var kubernetes = await client.LoadBasedOnConfigurationAsync();
+            logger.LogInformation("Creating namespace");
+
+            var pod = new V1Pod
+            {
+                Metadata = new V1ObjectMeta {Name = podname},
+                Spec = new V1PodSpec
+                {
+                    Containers = new List<V1Container>
+                    {
+                        new V1Container
+                        {
+                            Image = image,
+                            Name = $"image-{podname}"
+                        }
+                    }
+                }
+            };
+
+            try
+            {
+                await kubernetes.CreateNamespacedPodAsync(pod, namespaceName);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
+
+            return true;
         }
     }
 }
