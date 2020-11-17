@@ -31,18 +31,10 @@
             <td>@currentModel.CreationDate.ToShortDateString()</td>
             <td>@currentModel.Labels</td>
             <td>
-                <span id='load@currentModel.Id'>Load pods</span>
-                <script type="text/javascript">
-                    document.getElementById('load@currentModel.Id').addEventListener('click', () => {
-                            fetch('/Kubek/ListNamespaces?handler=GetPods&Name=@currentModel.Name') 
-                                .then(result=>{
-                                    return result.text();
-                                })                                           
-                                .then(text => {
-                                    console.log(text);
-                                    document.getElementById('load@currentModel.Id').innerHTML = text;
-                                })});
-                </script>
+                <a asp-page="/Kubek/PodForNamespace"
+                   asp-route-name="@currentModel.Name">
+                    Pods <i class="far fa-arrow-alt-circle-right"></i>
+                </a>
             </td>
         </tr>
     }

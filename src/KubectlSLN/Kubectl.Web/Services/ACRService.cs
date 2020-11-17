@@ -39,7 +39,7 @@ namespace Kubectl.Web.Services
         {
             logger.LogInformation("Retrieving info about registry");
             var registry =
-                await azure.ContainerRegistries.GetByResourceGroupAsync(azureAdOptions.AcrRG, 
+                await azure.ContainerRegistries.GetByResourceGroupAsync(azureAdOptions.AcrRG,
                     containerRegistryName);
             logger.LogInformation("Registry info retrieved!");
             return registry;
@@ -48,33 +48,34 @@ namespace Kubectl.Web.Services
         public async Task<List<DockerImageViewModel>> GetImagesForRepositoryAsync(string containerRegistryName)
         {
             var list = new List<DockerImageViewModel>();
-            var repository = await GetRegistryRepositoriesAsync(containerRegistryName);
-            if (repository == null)
-            {
-                logger.LogCritical("Repository is not retrieved, cannot load images");
-                return list;
-            }
-
             logger.LogInformation("Getting docker client to call VM to get images");
+            
             try
             {
-                using var client = new DockerClientConfiguration(new Uri(azureAdOptions.DockerHostUrl)).CreateClient();
+                using var client = new DockerClientConfiguration(new Uri(azureAdOptions.DockerHostUrl))
+                    .CreateClient();
                 var listImages = await client.Images.ListImagesAsync(
                     new ImagesListParameters {All = true});
                 logger.LogInformation("Retrieved client, doing list images");
                 foreach (var img in listImages)
                 {
-                    list.Add(new DockerImageViewModel
+                    if (img.RepoTags != null && img.RepoTags.Count > 0)
                     {
-                        Id = img.ID,
-                        Name = img.RepoTags[0]
-                    });
+                        string name = img.RepoTags[0];
+                        if (!name.Contains("none"))
+                            list.Add(new DockerImageViewModel
+                            {
+                                Id = img.ID,
+                                Name = name
+                            });
+                    }
                 }
             }
             catch (Exception e)
             {
                 logger.LogError(e.Message);
             }
+
             logger.LogInformation("Listening images done");
 
             return list;

@@ -52,7 +52,13 @@ namespace Kubectl.Web.Services
 
             var pod = new V1Pod
             {
-                Metadata = new V1ObjectMeta {Name = podname},
+                Metadata = new V1ObjectMeta
+                {
+                    Name = podname, Labels = new Dictionary<string, string>
+                    {
+                        {"app", podname}
+                    }
+                },
                 Spec = new V1PodSpec
                 {
                     Containers = new List<V1Container>
@@ -85,7 +91,7 @@ namespace Kubectl.Web.Services
             var kubernetes = await client.LoadBasedOnConfigurationAsync();
             logger.LogInformation("Creating namespace");
             string namespaceName = $"{name}-test";
-            
+
             try
             {
                 logger.LogInformation("Starting to create namespace");
@@ -137,9 +143,9 @@ namespace Kubectl.Web.Services
                 }, namespaceName);
 
                 logger.LogInformation($"Creating service in a namespace {namespaceName}");
-                
+
                 //3. create service
-                var createdService = await kubernetes.CreateNamespacedServiceAsync(new V1Service()
+                var createdService = await kubernetes.CreateNamespacedServiceAsync(new V1Service
                 {
                     Metadata = new V1ObjectMeta
                     {
@@ -154,9 +160,9 @@ namespace Kubectl.Web.Services
                         Type = Constants.ServiceTypeLoadBalancer
                     }
                 }, namespaceName);
-                
+
                 logger.LogInformation("Getting IP from newly created service");
-                
+
                 //4. get IP (of course here you can map it to external )
                 return createdService.Spec.LoadBalancerIP;
             }

@@ -1,0 +1,47 @@
+@page "{name}"
+@model PodForNamespacePageModel
+
+@{
+    ViewData["Title"] = "List pod for namespace " + Model.Name;
+}
+
+<div class="row">
+    <div class="float-right">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a asp-page="/Kubek/Dashboard">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a asp-page="/Kubek/ListNamespaces">Namespaces</a>
+                </li>
+                <li aria-current="page"
+                    class="breadcrumb-item active">
+                    Pods in namespace @Model.Name
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<h1>List pod for namespace @Model.Name</h1>
+
+<p class="text-info">All pods inside namespace</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Labels</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var currentModel in Model.PodViewModels)
+    {
+        <tr>
+            <td>@currentModel.Name</td>
+            <td>@currentModel.Labels</td>
+        </tr>
+    }
+    </tbody>
+</table>

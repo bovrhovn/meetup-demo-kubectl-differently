@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Kubectl.Web.Interfaces;
 using Kubectl.Web.Models;
@@ -21,38 +22,33 @@ namespace Kubectl.Web.Pages.Kubek
 
         public async Task OnGetAsync()
         {
-            var namespaces = await kubernetesObjects.ListNamespacesAsync();
-            foreach (var currentNamespace in namespaces)
+            try
             {
-                string labels = string.Empty;
-                foreach (var keyValuePair in currentNamespace.Metadata.Labels)
+                var namespaces = await kubernetesObjects.ListNamespacesAsync();
+                foreach (var currentNamespace in namespaces)
                 {
-                    labels += $"{keyValuePair.Key}:{keyValuePair.Value} ";
+                    string labels = string.Empty;
+                    if (currentNamespace.Metadata.Labels != null)
+                    {
+                        foreach (var keyValuePair in currentNamespace.Metadata.Labels)
+                        {
+                            labels += $"{keyValuePair.Key}:{keyValuePair.Value} ";
+                        }
+                    }
+
+                    NamespaceViewModels.Add(new NamespaceViewModel
+                    {
+                        Id = currentNamespace.Metadata.Uid,
+                        Name = currentNamespace.Metadata.Name,
+                        CreationDate = currentNamespace.Metadata.CreationTimestamp ?? DateTime.Now,
+                        Labels = labels
+                    });
                 }
-
-                NamespaceViewModels.Add(new NamespaceViewModel
-                {
-                    Id = currentNamespace.Metadata.Uid,
-                    Name = currentNamespace.Metadata.Name,
-                    CreationDate = currentNamespace.Metadata.CreationTimestamp ?? DateTime.Now,
-                    Labels = labels
-                });
             }
-        }
-
-        public async Task<IActionResult> OnGetPods()
-        {
-            var pods = await kubernetesObjects.ListPodsAsync(Name);
-
-            string currentPods = "<ul>";
-            foreach (var pod in pods)
+            catch (Exception e)
             {
-                currentPods += $"<li>{pod.Metadata.Name}</li>";
+                Debug.Write(e.Message);
             }
-
-            currentPods += "</ul>";
-
-            return Content(currentPods);
         }
 
         [BindProperty(SupportsGet = true)] public string Name { get; set; }

@@ -51,7 +51,7 @@ namespace Kubectl.Web.Pages.Kubek
             logger.LogInformation($"Received {imageName}");
             if (!string.IsNullOrEmpty(imageName))
             {
-                if (string.IsNullOrEmpty(PodName)) PodName = Utils.GenerateName(5);
+                if (string.IsNullOrEmpty(PodName)) PodName = Utils.GenerateName(5).ToLower();
 
                 if (!await kubernetesCrud.CreatePodAsync(NamespaceName, PodName, imageName))
                 {
