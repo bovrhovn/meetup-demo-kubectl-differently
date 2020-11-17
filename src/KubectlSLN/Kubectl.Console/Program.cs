@@ -41,6 +41,13 @@ namespace Kubectl.Console
             HorizontalRule("List pods in namespace - app");
 
             var listPodInNamespace = await client.ListNamespacedPodAsync("app");
+            
+            var table = new Table();
+            table.Border(TableBorder.Rounded);
+            
+            table.AddColumn("Pod name");
+            table.AddColumn(new TableColumn("Labels").Centered());
+            
             foreach (var currentPod in listPodInNamespace.Items)
             {
                 string labels = string.Empty;
@@ -49,19 +56,21 @@ namespace Kubectl.Console
                     labels += $" {labelPair.Key}:{labelPair.Value} ";
                 }
 
-                System.Console.WriteLine($"{currentPod.Metadata.Name} has this labels {labels}");
+                table.AddRow(currentPod.Metadata.Name, labels);
             }
+            
+            AnsiConsole.Render(table);
 
             System.Console.Read(); //break for continue
             
             HorizontalRule("Creating namespace and pod");
             var namespaceNameForTest = "test";
             var newNamespace = new V1Namespace {Metadata = new V1ObjectMeta {Name = namespaceNameForTest}};
-
+            
             var resultNamespaceCreated = await client.CreateNamespaceAsync(newNamespace);
             System.Console.WriteLine(
                 $"Namespace {resultNamespaceCreated.Metadata.Name} has been created and it is in {resultNamespaceCreated.Status.Phase} state");
-
+            
             var pod = new V1Pod
             {
                 Metadata = new V1ObjectMeta {Name = "nginx-test"},
@@ -84,7 +93,7 @@ namespace Kubectl.Console
             
             var createdPodInNamespaceTest = await client.CreateNamespacedPodAsync(pod, namespaceNameForTest);
             System.Console.WriteLine($"Pod in namespace {namespaceNameForTest} has been created with state {createdPodInNamespaceTest.Status.Phase}");
-
+            
             System.Console.Read(); //break for continue
             
             HorizontalRule("Exec into pod");
@@ -92,10 +101,10 @@ namespace Kubectl.Console
             var webSocket =
                 await client.WebSocketNamespacedPodExecAsync(pod.Metadata.Name, 
                     namespaceNameForTest, "env", pod.Spec.Containers[0].Name);
-
+            
             var demux = new StreamDemuxer(webSocket);
             demux.Start();
-
+            
             var buff = new byte[4096];
             var stream = demux.GetStream(1, 1);
             await stream.ReadAsync(buff, 0, 4096);
