@@ -7,6 +7,7 @@ using Kubectl.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 
 namespace Kubectl.Web.Pages.Kubek
 {
@@ -14,14 +15,18 @@ namespace Kubectl.Web.Pages.Kubek
     public class ListNamespacesPageModel : PageModel
     {
         private readonly IKubernetesObjects kubernetesObjects;
+        private readonly ILogger<ListNamespacesPageModel> logger;
 
-        public ListNamespacesPageModel(IKubernetesObjects kubernetesObjects)
+        public ListNamespacesPageModel(IKubernetesObjects kubernetesObjects, 
+            ILogger<ListNamespacesPageModel> logger)
         {
             this.kubernetesObjects = kubernetesObjects;
+            this.logger = logger;
         }
 
         public async Task OnGetAsync()
         {
+            logger.LogInformation("Getting data about namespaces");
             try
             {
                 var namespaces = await kubernetesObjects.ListNamespacesAsync();
@@ -48,7 +53,9 @@ namespace Kubectl.Web.Pages.Kubek
             catch (Exception e)
             {
                 Debug.Write(e.Message);
+                logger.LogError(e.Message);
             }
+            logger.LogInformation("Done loading namespaces");
         }
 
         [BindProperty(SupportsGet = true)] public string Name { get; set; }

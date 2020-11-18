@@ -1,3 +1,4 @@
+using System.Net;
 using Kubectl.Web.Hub;
 using Kubectl.Web.Interfaces;
 using Kubectl.Web.Options;

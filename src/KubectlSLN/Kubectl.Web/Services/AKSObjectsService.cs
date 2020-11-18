@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using k8s;
@@ -23,7 +24,16 @@ namespace Kubectl.Web.Services
             logger.LogInformation("Getting cluster information - client - ListNamespacesAsync");
             var kubernetes = await client.LoadBasedOnConfigurationAsync();
             logger.LogInformation("Listining namespaces");
-            return kubernetes.ListNamespace().Items;
+            try
+            {
+                var list = await kubernetes.ListNamespaceAsync();
+                return list.Items;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+            return new List<V1Namespace>();
         }
 
         public async Task<IEnumerable<V1Pod>> ListPodsAsync(string namespaceName = "default")
@@ -31,8 +41,16 @@ namespace Kubectl.Web.Services
             logger.LogInformation("Getting cluster information - client - ListPodsAsync");
             var kubernetes = await client.LoadBasedOnConfigurationAsync();
             logger.LogInformation("Listining pods");
-            var list = await kubernetes.ListNamespacedPodAsync(namespaceName);
-            return list.Items;
+            try
+            {
+                var list = await kubernetes.ListNamespacedPodAsync(namespaceName);
+                return list.Items;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+            return new List<V1Pod>();
         }
     }
 }
