@@ -6,7 +6,7 @@ Sample code and presentation for Kubernetes virtual meetup in Slovenia about kub
 
 Solution has 3 projects:
 
-![solution info](https://csacoresettings.blob.core.windows.net/public/meetup-solution-info.png)
+![solution info](https://webeudatastorage.blob.core.windows.net/web/meetup-solution-info.png)
 
 Each of them connects to Kubernetes APIs (in a different way):
 1. **[Kubectl.Console](https://github.com/bovrhovn/meetup-demo-kubectl-differently/tree/main/src/KubectlSLN/Kubectl.Console)** - example how to use different [C# managed library](https://github.com/kubernetes-client/csharp) API
