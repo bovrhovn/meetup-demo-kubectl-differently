@@ -10,13 +10,13 @@ Solution has 3 projects:
 
 Each of them connects to Kubernetes APIs (in a different way):
 1. **[Kubectl.Console](https://github.com/bovrhovn/meetup-demo-kubectl-differently/tree/main/src/KubectlSLN/Kubectl.Console)** - example how to use different [C# managed library](https://github.com/kubernetes-client/csharp) API
-![one of the results](https://csacoresettings.blob.core.windows.net/public/meetup-list-pods-managed.png)
+![one of the results](https://webeudatastorage.blob.core.windows.net/web/meetup-list-pods-managed.png)
 
 2. **[Kubectl.Rest](https://github.com/bovrhovn/meetup-demo-kubectl-differently/tree/main/src/KubectlSLN/Kubectl.Rest)** - example how to do a call from managed library using plain REST calls
-![name of pods](https://csacoresettings.blob.core.windows.net/public/meetup-pod-name-rest.png)
+![name of pods](https://webeudatastorage.blob.core.windows.net/web/meetup-pod-name-rest.png)
 
 3. **[Kubectl.Web](https://github.com/bovrhovn/meetup-demo-kubectl-differently/tree/main/src/KubectlSLN/Kubectl.Web)** - example how to integrate calls to API's into [ASP.NET](https://asp.net) and taking advantage of managed libraries
-![web dashboard](https://csacoresettings.blob.core.windows.net/public/meetup-web-view.png)
+![web dashboard](https://webeudatastorage.blob.core.windows.net/web/meetup-web-view.png)
 
 
 ## DEMO setup instructions
@@ -31,7 +31,7 @@ You will need to have working Kubernetes cluster. Minikube is enough for playing
 
 If you have [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installed, use `kubectl config view` to see the file.
 
-![config view](https://csacoresettings.blob.core.windows.net/public/meetup-config-view.png)
+![config view](https://webeudatastorage.blob.core.windows.net/web/meetup-config-view.png)
 
 Solution will automatically load the default config file and authenticate against Kubernetes cluster.
 
@@ -43,7 +43,7 @@ The easiest way is to create [service account](https://kubernetes.io/docs/refere
 
 To do it stepy by step,[follow](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) this tutorial. When you have the service principal, you will need to fill in the [following details](https://github.com/bovrhovn/meetup-demo-kubectl-differently/blob/main/src/KubectlSLN/Kubectl.Web/appsettings.json) in configuration setting (or add environment variables):
 
-![settings](https://csacoresettings.blob.core.windows.net/public/meetup-web-settings.png)
+![settings](https://webeudatastorage.blob.core.windows.net/web/meetup-web-settings.png)
 
 You can find the data in service principal details (created earlier) and Azure AD portal details page. As part of the application, I am using [Azure Storage](https://docs.microsoft.com/en-us/azure/storage/) to store different config files (in demo only one), you will need to fill in the details about [Storage connection string](https://docs.microsoft.com/en-us/azure/storage/common/storage-configure-connection-string?toc=/azure/storage/blobs/toc.json) and container name.
 
